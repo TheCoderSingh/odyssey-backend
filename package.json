@@ -1,0 +1,18 @@
+{
+  "name": "odyssey-backend",
+  "version": "1.0.0",
+  "description": "Odyssey",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheCoderSingh/odyssey-backend"
+  },
+  "keywords": [
+    "odyssey"
+  ],
+  "author": "TheCoderSingh",
+  "license": "ISC"
+}
