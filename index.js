@@ -1,11 +1,13 @@
-const express = require("express");
+import express from "express";
+import { config } from "dotenv";
+import connectToDb from "./db/connection.js";
+
+config();
+
 const app = express();
-const dotenv = require("dotenv");
-
-dotenv.config();
-
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
+  connectToDb();
   console.log(`Listening on port ${port}.`);
 });
