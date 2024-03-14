@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 
 const signup = async (req, res) => {
@@ -29,7 +30,9 @@ const signup = async (req, res) => {
         res
       )
     ) {
-      // TODO: Hash the password before saving to database
+      // Hash the password before saving to database
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       // Create a new user
       const newUser = new User({
@@ -37,7 +40,7 @@ const signup = async (req, res) => {
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
         gender,
         profilePic,
       });
