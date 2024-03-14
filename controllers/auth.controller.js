@@ -1,5 +1,7 @@
-import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
+import hashPassword from "../utils/hashPassword.js";
+import generateToken from "../utils/generateToken.js";
+import setCookie from "../utils/setCookie.js";
 
 const signup = async (req, res) => {
   const {
@@ -31,8 +33,7 @@ const signup = async (req, res) => {
       )
     ) {
       // Hash the password before saving to database
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+      const hashedPassword = await hashPassword(password);
 
       // Create a new user
       const newUser = new User({
@@ -44,6 +45,11 @@ const signup = async (req, res) => {
         gender,
         profilePic,
       });
+
+      // TODO: Generate a JWT token
+      const token = generateToken(newUser._id);
+
+      setCookie(token, res);
 
       await newUser.save();
 
