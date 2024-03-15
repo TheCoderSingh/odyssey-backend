@@ -1,9 +1,10 @@
+import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import hashPassword from "../utils/hashPassword.js";
 import generateToken from "../utils/generateToken.js";
 import setCookie from "../utils/setCookie.js";
 
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
   const {
     username,
     firstName,
@@ -65,8 +66,6 @@ const signup = async (req, res) => {
   }
 };
 
-export default signup;
-
 const isUserValid = async (
   {
     username,
@@ -121,4 +120,25 @@ const isUserValid = async (
   }
 
   return true;
+};
+
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await User.findOne({ username });
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!user || !isPasswordCorrect)
+      return res.status(400).json({ error: "Invalid username or password." });
+
+    const token = generateToken(user._id);
+    setCookie(token, res);
+
+    res.status(200).json({ message: `${username} logged in.` });
+  } catch (error) {
+    console.log("Error in logging in: ", error.message);
+    res.status(400).json({ error: "An error occurred while logging in." });
+  }
 };
