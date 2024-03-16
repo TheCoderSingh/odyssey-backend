@@ -87,6 +87,12 @@ const isUserValid = async (
     return false;
   }
 
+  // Check if username is invalid
+  if (!/^[a-z0-9_\.]+$/.test(username)) {
+    res.status(400).json({ error: "Invalid username." });
+    return false;
+  }
+
   // Check if first name is invalid
   if (!/^[a-z ,.'-]+$/i.test(firstName)) {
     res.status(400).json({ error: "Invalid first name." });
